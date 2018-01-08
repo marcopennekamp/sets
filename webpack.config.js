@@ -5,7 +5,7 @@ function resolve (dir) {
 }
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/sets.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'sets.js',
