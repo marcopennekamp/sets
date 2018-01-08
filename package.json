@@ -4,8 +4,9 @@
   "description": "A library for working with Sets and arrays as sets.",
   "main": "src/sets.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "flow": "flow",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -27,11 +28,14 @@
   "homepage": "https://github.com/marcopennekamp/sets#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
     "babel-loader": "^7.1.2",
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-loader": "^1.9.0",
+    "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.8.0",
+    "flow-bin": "^0.63.1",
     "webpack": "^3.10.0"
   },
   "dependencies": {
