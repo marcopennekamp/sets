@@ -4,3 +4,6 @@ sets.iml
 
 # Node.js
 node_modules
+
+# Output
+dist
