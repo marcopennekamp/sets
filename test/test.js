@@ -24,6 +24,12 @@ describe('areEqual', () => {
   it('should return true for equal sets', () => {
     assessEqualSets(sets.areEqual);
   });
+  it('should return false for subsets', () => {
+    assessCollectionCombinations([], [1], sets.areEqual, isFalse);
+    assessCollectionCombinations([], ['x', 'y', 3], sets.areEqual, isFalse);
+    assessCollectionCombinations([1, 2], [1, 2, 3], sets.areEqual, isFalse);
+    assessCollectionCombinations(['y', 'x', 3], [3, 'x', 44, 'y', 'abc'], sets.areEqual, isFalse);
+  });
 });
 
 describe('isSubset', () => {
