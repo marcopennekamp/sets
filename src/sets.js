@@ -10,10 +10,10 @@ export function map<A, B>(collection: Collection<A>, f: A => B): Set<B> {
 }
 
 /**
- * Folds the elements of the set with an operation into an accumulator.
+ * Folds the elements of the set with an operation into a value, starting from an initial value.
  */
-export function fold<A, X>(collection: Collection<A>, initial: X, f: (X, A) => X): X {
-  return toArray(collection).reduce(f, initial);
+export function fold<A, X>(collection: Collection<A>, initial: X, operation: (X, A) => X): X {
+  return toArray(collection).reduce(operation, initial);
 }
 
 /**
