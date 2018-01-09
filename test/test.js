@@ -51,6 +51,16 @@ function assessEqualSets(operation, checkBuilder) {
   assess(['x', 'y'], ['y', 'x']);
 }
 
+/**
+ * Applies an assess function to some single sets.
+ */
+function applyToSingleSets(assess) {
+  assess(['p']);
+  assess([1, 2]);
+  assess(['x', 'y']);
+  assess(['y', 'x']);
+}
+
 describe('areEqual', () => {
   it('should return true for equal sets', () => {
     assessEqualSets(sets.areEqual, wrapCheck(isTrue));
@@ -91,14 +101,10 @@ describe('union', () => {
     assessEqualSets(sets.union, noChangeCheckBuilder);
   });
   it('should return the non-trivial set if one set is empty', () => {
-    const assess = arr => {
+    applyToSingleSets(arr => {
       assessCollectionCombinations([], arr, sets.union, equalSet(arr));
       assessCollectionCombinations(arr, [], sets.union, equalSet(arr));
-    };
-    assess(['p']);
-    assess([1, 2]);
-    assess(['x', 'y']);
-    assess(['y', 'x']);
+    });
   });
   it('should return the union of non-trivial sets', () => {
     assessCollectionCombinations(['x', 'y'], [3], sets.union, equalSet(['x', 'y', 3]));
@@ -112,19 +118,33 @@ describe('intersection', () => {
     assessEqualSets(sets.intersection, noChangeCheckBuilder);
   });
   it('should return the empty set if one set is empty', () => {
-    const assess = arr => {
+    applyToSingleSets(arr => {
       assessCollectionCombinations([], arr, sets.intersection, equalSet([]));
       assessCollectionCombinations(arr, [], sets.intersection, equalSet([]));
-    };
-    assess(['p']);
-    assess([1, 2]);
-    assess(['x', 'y']);
-    assess(['y', 'x']);
+    });
   });
   it('should return the intersection of non-trivial sets', () => {
     assessCollectionCombinations(['x', 'y'], [3], sets.intersection, equalSet([]));
     assessCollectionCombinations([1, 3, 2], [2, 4, 1], sets.intersection, equalSet([1, 2]));
     assessCollectionCombinations([11, 'abc', 4], ['def', 4, 'ghi'], sets.intersection, equalSet([4]));
     assessCollectionCombinations(['x', 'y', 1], ['y', 7, 'x'], sets.intersection, equalSet(['x', 'y']));
+  });
+});
+
+describe('difference', () => {
+  it('should return the empty set for equal sets', () => {
+    assessEqualSets(sets.difference, wrapCheck(equalSet([])));
+  });
+  it('should return the same set if the right set is empty', () => {
+    applyToSingleSets(arr => assessCollectionCombinations(arr, [], sets.difference, equalSet(arr)));
+  });
+  it('should return the empty set if the left set is empty', () => {
+    applyToSingleSets(arr => assessCollectionCombinations([], arr, sets.difference, equalSet([])));
+  });
+  it('should return the difference of non-trivial sets', () => {
+    assessCollectionCombinations(['x', 'y'], [3], sets.difference, equalSet(['x', 'y']));
+    assessCollectionCombinations([1, 3, 2], [2, 4, 1], sets.difference, equalSet([3]));
+    assessCollectionCombinations([11, 'abc', 4], ['def', 4, 'ghi'], sets.difference, equalSet([11, 'abc']));
+    assessCollectionCombinations(['x', 'y', 1], ['y', 7, 'x'], sets.difference, equalSet([1]));
   });
 });
