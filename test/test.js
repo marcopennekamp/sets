@@ -148,3 +148,21 @@ describe('difference', () => {
     assessCollectionCombinations(['x', 'y', 1], ['y', 7, 'x'], sets.difference, equalSet([1]));
   });
 });
+
+describe('symmetric difference', () => {
+  it('should return the empty set for equal sets', () => {
+    assessEqualSets(sets.symmetricDifference, wrapCheck(equalSet([])));
+  });
+  it('should return the left set if the right set is empty', () => {
+    applyToSingleSets(arr => assessCollectionCombinations(arr, [], sets.symmetricDifference, equalSet(arr)));
+  });
+  it('should return the right set if the left set is empty', () => {
+    applyToSingleSets(arr => assessCollectionCombinations([], arr, sets.symmetricDifference, equalSet(arr)));
+  });
+  it('should return the symmetric difference of non-trivial sets', () => {
+    assessCollectionCombinations(['x', 'y'], [3], sets.symmetricDifference, equalSet(['x', 'y', 3]));
+    assessCollectionCombinations([1, 3, 2], [2, 4, 1], sets.symmetricDifference, equalSet([3, 4]));
+    assessCollectionCombinations([11, 'abc', 4], ['def', 4, 'ghi'], sets.symmetricDifference, equalSet([11, 'abc', 'def', 'ghi']));
+    assessCollectionCombinations(['x', 'y', 1], ['y', 7, 'x'], sets.symmetricDifference, equalSet([1, 7]));
+  });
+});
