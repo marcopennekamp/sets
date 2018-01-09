@@ -31,6 +31,27 @@ export function exists<A>(collection: Collection<A>, condition: A => boolean): b
 }
 
 /**
+ * Checks whether left is a subset of right.
+ */
+export function isSubset<A>(left: Collection<A>, right: Collection<A>): boolean {
+  const leftSet = setify(left);
+  const rightSet = setify(right);
+
+  // We check naively whether all elements of the left set are also in the right set.
+  return forall(leftSet, value => rightSet.has(value));
+}
+
+/**
+ * Checks whether the two sets are equal.
+ */
+export function areEqual<A>(left: Collection<A>, right: Collection<A>): boolean {
+  const leftSet = setify(left);
+  const rightSet = setify(right);
+
+  return isSubset(leftSet, rightSet) && isSubset(rightSet, leftSet);
+}
+
+/**
  * Returns the union of the two sets.
  */
 export function union<A>(c1: Collection<A>, c2: Collection<A>): Set<A> {
@@ -74,25 +95,4 @@ export function difference<A>(c1: Collection<A>, c2: Collection<A>): Set<A> {
  */
 export function symmetricDifference<A>(c1: Collection<A>, c2: Collection<A>): Set<A> {
   return union(difference(c1, c2), difference(c2, c1));
-}
-
-/**
- * Checks whether left is a subset of right.
- */
-export function isSubset<A>(left: Collection<A>, right: Collection<A>): boolean {
-  const leftSet = setify(left);
-  const rightSet = setify(right);
-
-  // We check naively whether all elements of the left set are also in the right set.
-  return forall(leftSet, value => rightSet.has(value));
-}
-
-/**
- * Checks whether the two sets are equal.
- */
-export function areEqual<A>(left: Collection<A>, right: Collection<A>): boolean {
-  const leftSet = setify(left);
-  const rightSet = setify(right);
-
-  return isSubset(leftSet, rightSet) && isSubset(rightSet, leftSet);
 }
