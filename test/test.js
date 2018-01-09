@@ -7,6 +7,10 @@ should();
 const isTrue = result => result.should.be.true;
 const isFalse = result => result.should.be.false;
 const equalSet = arr => result => result.should.deep.equal(new Set(arr));
+const noChangeCheckBuilder = (arr1, arr2) => result => {
+  result.should.deep.equal(new Set(arr1));
+  result.should.deep.equal(new Set(arr2));
+};
 
 /**
  * Returns a check builder from an already constructed check operation. This can be
@@ -84,18 +88,15 @@ describe('isSubset', () => {
 
 describe('union', () => {
   it('should return the same set for equal sets', () => {
-    assessEqualSets(sets.union, (arr1, arr2) => result => {
-      result.should.deep.equal(new Set(arr1));
-      result.should.deep.equal(new Set(arr2));
-    });
+    assessEqualSets(sets.union, noChangeCheckBuilder);
   });
   it('should return the non-trivial set if one set is empty', () => {
     const assess = arr => {
       assessCollectionCombinations([], arr, sets.union, equalSet(arr));
       assessCollectionCombinations(arr, [], sets.union, equalSet(arr));
     };
+    assess(['p']);
     assess([1, 2]);
-    assess([]);
     assess(['x', 'y']);
     assess(['y', 'x']);
   });
@@ -103,5 +104,27 @@ describe('union', () => {
     assessCollectionCombinations(['x', 'y'], [3], sets.union, equalSet(['x', 'y', 3]));
     assessCollectionCombinations([1, 3, 2], [2, 4], sets.union, equalSet([1, 2, 3, 4]));
     assessCollectionCombinations([11, 'abc', 4], ['def', 4], sets.union, equalSet([4, 11, 'abc', 'def']));
+  });
+});
+
+describe('intersection', () => {
+  it('should return the same set for equal sets', () => {
+    assessEqualSets(sets.intersection, noChangeCheckBuilder);
+  });
+  it('should return the empty set if one set is empty', () => {
+    const assess = arr => {
+      assessCollectionCombinations([], arr, sets.intersection, equalSet([]));
+      assessCollectionCombinations(arr, [], sets.intersection, equalSet([]));
+    };
+    assess(['p']);
+    assess([1, 2]);
+    assess(['x', 'y']);
+    assess(['y', 'x']);
+  });
+  it('should return the intersection of non-trivial sets', () => {
+    assessCollectionCombinations(['x', 'y'], [3], sets.intersection, equalSet([]));
+    assessCollectionCombinations([1, 3, 2], [2, 4, 1], sets.intersection, equalSet([1, 2]));
+    assessCollectionCombinations([11, 'abc', 4], ['def', 4, 'ghi'], sets.intersection, equalSet([4]));
+    assessCollectionCombinations(['x', 'y', 1], ['y', 7, 'x'], sets.intersection, equalSet(['x', 'y']));
   });
 });
