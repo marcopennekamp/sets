@@ -1,38 +1,6 @@
 // @flow
 
-type Collection<A> = Set<A> | Array<A>;
-
-const collectionTypeErrorMessage = 'The argument must be a Set or an Array.';
-
-/**
- * Converts a collection object to a Set.
- */
-function setify<A>(collection: Collection<A>): Set<A> {
-  if (collection instanceof Set) {
-    return collection;
-  }
-
-  if (Array.isArray(collection)) {
-    return new Set(collection);
-  }
-
-  throw new TypeError(collectionTypeErrorMessage);
-}
-
-/**
- * Converts a collection object to an Array.
- */
-function toArray<A>(collection: Collection<A>): Array<A> {
-  if (Array.isArray(collection)) {
-    return collection;
-  }
-
-  if (collection instanceof Set) {
-    return Array.from(collection);
-  }
-
-  throw new TypeError(collectionTypeErrorMessage);
-}
+import { type Collection, setify, toArray } from './collection';
 
 /**
  * Applies the function f to each value of the set, creating a new Set with the results.
