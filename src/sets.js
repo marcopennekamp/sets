@@ -7,7 +7,7 @@ const collectionTypeErrorMessage = 'The argument must be a Set or an Array.';
 /**
  * Converts a collection object to a Set.
  */
-export function setify<A>(collection: Collection<A>): Set<A> {
+function setify<A>(collection: Collection<A>): Set<A> {
   if (collection instanceof Set) {
     return collection;
   }
